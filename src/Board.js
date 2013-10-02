@@ -76,18 +76,35 @@
 
     // ROWS - run from left to right
     // --------------------------------------------------------------
-    // 
+    //
     // test if a specific row on this board contains a conflict
-    hasRowConflictAt: function(rowIndex){
-      return false; // fixme
+    hasRowConflictAt: function(rowIndex) {
+      var onesFound = 0;
+      var row = this.get(rowIndex);
+
+      for (var i = 0; i < row.length; i++) {
+        if (row[i] === 1) {
+          onesFound++;
+        }
+      }
+      if (onesFound > 1) {
+        return true;
+      }
+        return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function(){
-      return false; // fixme
+     var allRows = this.rows();
+     alert(this.rows());
+     for (var i = 0; i < allRows.length; i++){
+      alert(i);
+      if (this.hasRowConflictAt(i)){
+        return true;
+      }
+     }
+     return false;
     },
-
-
 
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
