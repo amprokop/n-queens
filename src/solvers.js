@@ -135,16 +135,27 @@ window.countNQueensSolutions = function(n){
   if (n === 4) return 2;
   subroutine();
 
+  function createBoard (n) {
+    var board = [];
+    for (var i = 0; i < n; i++) {
+      board[i] = [];
+      for (var j = 0; j < n; j++) {
+        board[i][j] = 0;
+      }
+    }
+    return board;
+  }
+
   function subroutine (row, board) {
     row = row || 0;
-    board = board || new Board({n:n}).rows();
+    board = board || createBoard(n);
 
     if (row === n) {
       return results.push(board);
     }
 
     for (var column = 0; column < n; column++) {
-        var newBoard = new Board(board).rows();
+        var newBoard = board.slice();
         newBoard[row][column] = 1;
         if ( !(hasColConflictAt(board, column) || hasMajorDiagonalConflictAt(board, column - row) || hasMinorDiagonalConflictAt(board, column+row))){
         subroutine(row+1, newBoard);
