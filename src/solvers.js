@@ -112,6 +112,7 @@ window.countNRooksSolutions = function(n){
 window.findNQueensSolution = function(n){
   var solution = new Board({n:n});
   var board = solution.rows();
+
   for (var row = 0; row < board.length; row++) {
     for (var i = 0; i < board[row].length; i++) {
       board[row][i] = 1;
@@ -122,7 +123,6 @@ window.findNQueensSolution = function(n){
       }
     }
   }
-
   return board;
 };
 
@@ -150,19 +150,16 @@ window.countNQueensSolutions = function(n){
     row = row || 0;
     board = board || createBoard(n);
 
-    if (row === n) {
-      return results.push(board);
-    }
+    if (row === n) return results.push(board);
 
     for (var column = 0; column < n; column++) {
-        var newBoard = board.slice();
-        newBoard[row][column] = 1;
-        if ( !(hasColConflictAt(board, column) || hasMajorDiagonalConflictAt(board, column - row) || hasMinorDiagonalConflictAt(board, column+row))){
+      var newBoard = board.slice();
+      newBoard[row][column] = 1;
+      if ( !(hasColConflictAt(board, column) || hasMajorDiagonalConflictAt(board, column - row) || hasMinorDiagonalConflictAt(board, column+row))){
         subroutine(row+1, newBoard);
-        }
-        newBoard[row][column] = 0;
+      }
+      newBoard[row][column] = 0;
     }
-
   }
   return results.length;
 };
