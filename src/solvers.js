@@ -163,14 +163,13 @@ window.countNQueensSolutions = function(n){
     if (row === n) return results.push(board);
 
     for (var column = 0; column < n; column++) {
-      var newBoard = board.slice();
-      newBoard[row][column] = 1;
+      board[row][column] = 1;
       if ( ! ( hasColConflictAt(board, column) || contains(majConflict, column - row) || contains(minConflict, column+row) ) ) {
         var newMajConflict = majConflict.concat(column-row);
         var newMinConflict = minConflict.concat(column+row);
-        subroutine(row+1, newBoard, newMajConflict, newMinConflict);
+        subroutine(row+1, board, newMajConflict, newMinConflict);
       }
-      newBoard[row][column] = 0;
+      board[row][column] = 0;
     }
   }
   return results.length;
