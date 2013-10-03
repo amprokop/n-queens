@@ -51,6 +51,12 @@ window.findNRooksSolution = function(n){
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n){
   var results = [];
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+
+  subroutine();
+
 
   function contains (list, value) {
     for (var i = 0; i < list.length; i++) {
@@ -65,17 +71,16 @@ window.countNRooksSolutions = function(n){
     invalid = invalid || [];
     row = row || 0;
     board = board || new Board({n:n}).rows();
-
-    if (row === n-1) {
+    if (row === n) {
       results.push(board);
       return;
     }
+
     for (var column = 0; column < n; column++) {
-      if (!contains(invalid, column)){
-        var newBoard = board;
+      if (!_.contains(invalid, column)){
+        var newBoard = new Board(board).rows();
         newBoard[row][column] = 1;
-        var newInvalid = invalid;
-        newInvalid.push(column);
+        var newInvalid = invalid.concat(column);
         subroutine(newInvalid, row+1, newBoard);
       }
     }
