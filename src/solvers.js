@@ -1,3 +1,54 @@
+
+var hasColConflictAt = function(board, colIndex){
+  var piecesFound = 0;
+
+  for (var i = 0; i < board.length; i++) {
+    if (board[i][colIndex] === 1) {
+      piecesFound++;
+    }
+  }
+  if (piecesFound > 1) {
+    return true;
+  }
+  return false;
+};
+
+var hasMajorDiagonalConflictAt = function(board, majorDiagonalColumnIndexAtFirstRow){
+  var piecesFound = 0;
+
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 0; j < board[i].length; j++) {
+      if ((j - i) === majorDiagonalColumnIndexAtFirstRow && board[i][j] === 1) {
+        piecesFound++;
+      }
+    }
+  }
+  if (piecesFound > 1) {
+    return true;
+  }
+  return false;
+};
+
+var hasMinorDiagonalConflictAt = function (board, minorDiagonalColumnIndexAtFirstRow){
+  var piecesFound = 0;
+
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 0; j < board[i].length; j++) {
+      if ((j + i) === minorDiagonalColumnIndexAtFirstRow && board[i][j] === 1) {
+        piecesFound++;
+      }
+    }
+  }
+  if (piecesFound > 1) {
+    return true;
+  }
+  return false;
+};
+
+
+
+
+
 /*           _                    
    ___  ___ | |_   _____ _ __ ___ 
   / __|/ _ \| \ \ / / _ \ '__/ __|
@@ -14,34 +65,19 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 window.findNRooksSolution = function(n){
   var solution = new Board({n:n});
-  var newRows = solution.rows();
+  var board = solution.rows();
 
-  for (var row = 0; row < newRows.length; row++) {
-    for (var i = 0; i < newRows[row].length; i++) {
-      newRows[row][i] = 1;
-      if(hasColConflictAt(i)){
-        newRows[row][i] = 0;
+  for (var row = 0; row < board.length; row++) {
+    for (var i = 0; i < board[row].length; i++) {
+      board[row][i] = 1;
+      if(hasColConflictAt(board, i)){
+        board[row][i] = 0;
       } else {
         break;
       }
     }
   }
-
-  function hasColConflictAt(colIndex){
-    var onesFound = 0;
-    var allRows = newRows;
-
-    for (var i = 0; i < allRows.length; i++) {
-      if (allRows[i][colIndex] === 1) {
-        onesFound++;
-      }
-    }
-    if (onesFound > 1) {
-      return true;
-    }
-      return false;
-  }
-  return newRows;
+  return board;
 };
 
 
@@ -75,75 +111,47 @@ window.countNRooksSolutions = function(n){
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n){
   var solution = new Board({n:n});
-  var newRows = solution.rows();
-
-  for (var row = 0; row < newRows.length; row++) {
-    for (var i = 0; i < newRows[row].length; i++) {
-      newRows[row][i] = 1;
-      if(hasColConflictAt(i) || hasMajorDiagonalConflictAt(i) || hasMinorDiagonalConflictAt(i)){
-        newRows[row][i] = 0;
+  var board = solution.rows();
+  for (var row = 0; row < board.length; row++) {
+    for (var i = 0; i < board[row].length; i++) {
+      board[row][i] = 1;
+      if(hasColConflictAt(board, i) || hasMajorDiagonalConflictAt(board, i-row) || hasMinorDiagonalConflictAt(board, row+i)){
+        board[row][i] = 0;
       } else {
         break;
       }
     }
   }
 
-  function hasColConflictAt(colIndex){
-    var onesFound = 0;
-    var allRows = newRows;
-
-    for (var i = 0; i < allRows.length; i++) {
-      if (allRows[i][colIndex] === 1) {
-        onesFound++;
-      }
-    }
-    if (onesFound > 1) {
-      return true;
-    }
-      return false;
-  }
-
-  function hasMajorDiagonalConflictAt (majorDiagonalColumnIndexAtFirstRow){
-    var piecesFound = 0;
-    var theRows = newRows;
-
-    for (var i = 0; i < theRows.length; i++) {
-      for (var j = 0; j < theRows[i].length; j++) {
-        if ((j - i) === majorDiagonalColumnIndexAtFirstRow && theRows[i][j] === 1) {
-          piecesFound++;
-        }
-      }
-    }
-    if (piecesFound > 1) {
-      return true;
-    }
-    return false;
-  }
-
-  function hasMinorDiagonalConflictAt (minorDiagonalColumnIndexAtFirstRow){
-    var piecesFound = 0;
-    var theRows = newRows;
-
-    for (var i = 0; i < theRows.length; i++) {
-      for (var j = 0; j < theRows[i].length; j++) {
-        if ((j + i) === minorDiagonalColumnIndexAtFirstRow && theRows[i][j] === 1) {
-          piecesFound++;
-        }
-      }
-    }
-    if (piecesFound > 1) {
-      return true;
-    }
-    return false;
-  }
-  return newRows;
+  return board;
 };
 
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n){
-  var solutionCount = undefined; //fixme
+  var results = [];
+  if (n === 0 || n === 1) return 1;
+  if (n === 2 || n === 3) return 0;
+  if (n === 4) return 2;
+  subroutine();
 
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
+  function subroutine (row, board) {
+    row = row || 0;
+    board = board || new Board({n:n}).rows();
+
+    if (row === n) {
+      return results.push(board);
+    }
+
+    for (var column = 0; column < n; column++) {
+        var newBoard = new Board(board).rows();
+        newBoard[row][column] = 1;
+        if ( !(hasColConflictAt(board, column) || hasMajorDiagonalConflictAt(board, column - row) || hasMinorDiagonalConflictAt(board, column+row))){
+        subroutine(row+1, newBoard);
+        }
+        newBoard[row][column] = 0;
+    }
+
+  }
+  return results.length;
 };
