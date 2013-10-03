@@ -27,8 +27,6 @@ window.findNRooksSolution = function(n){
     }
   }
 
-
-
   function hasColConflictAt(colIndex){
     var onesFound = 0;
     var allRows = newRows;
@@ -52,11 +50,68 @@ window.findNRooksSolution = function(n){
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n){
-  var solutionCount = undefined; //fixme
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  var results = [];
+
+  function contains (list, value) {
+    for (var i = 0; i < list.length; i++) {
+      if (list[i] === value) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function subroutine (invalid, row, board) {
+    invalid = invalid || [];
+    row = row || 0;
+    board = board || new Board({n:n}).rows();
+
+    if (row === n-1) {
+      results.push(board);
+      return;
+    }
+    for (var column = 0; column < n; column++) {
+      if (!contains(invalid, column)){
+        var newBoard = board;
+        newBoard[row][column] = 1;
+        var newInvalid = invalid;
+        newInvalid.push(column);
+        subroutine(newInvalid, row+1, newBoard);
+      }
+    }
+  }
+  return results.length;
 };
 
+
+/*function nrooks (n)
+
+var results = [];
+
+function recursive (invalid_columns, round, board){
+  round = round || 0
+  board = board || new Board({n : n})
+  invalid_columns = invalid_columns || [];
+}
+
+if round = 0 {
+results.push(board);
+return;
+}
+
+  loop through all elements in our current row
+    if the index isn't in invalid columns array
+      make a new copy of the board with a piece added at our current position
+      var newboard = board
+      new board row whatever column something = 1
+      make a new copy of invalid_columns with the current column (our current index) added to it
+      return the function with new board copy, new invalid_columns copy, and round - 1 as arguments
+
+}
+
+return results
+
+*/
 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
