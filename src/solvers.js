@@ -45,6 +45,15 @@ var hasMinorDiagonalConflictAt = function (board, minorDiagonalColumnIndexAtFirs
   return false;
 };
 
+var contains = function (array, target) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i] === target) {
+      return true;
+    }
+  }
+  return false;
+};
+
 
 
 
@@ -112,7 +121,6 @@ window.countNRooksSolutions = function(n){
 window.findNQueensSolution = function(n){
   var solution = new Board({n:n});
   var board = solution.rows();
-
   for (var row = 0; row < board.length; row++) {
     for (var i = 0; i < board[row].length; i++) {
       board[row][i] = 1;
@@ -146,17 +154,21 @@ window.countNQueensSolutions = function(n){
     return board;
   }
 
-  function subroutine (row, board) {
+  function subroutine (row, board, majConflict, minConflict) {
     row = row || 0;
     board = board || createBoard(n);
+    majConflict = majConflict || [];
+    minConflict = minConflict || [];
 
     if (row === n) return results.push(board);
 
     for (var column = 0; column < n; column++) {
       var newBoard = board.slice();
       newBoard[row][column] = 1;
-      if ( !(hasColConflictAt(board, column) || hasMajorDiagonalConflictAt(board, column - row) || hasMinorDiagonalConflictAt(board, column+row))){
-        subroutine(row+1, newBoard);
+      if ( ! ( hasColConflictAt(board, column) || contains(majConflict, column - row) || contains(minConflict, column+row) ) ) {
+        var newMajConflict = majConflict.concat(column-row);
+        var newMinConflict = minConflict.concat(column+row);
+        subroutine(row+1, newBoard, newMajConflict, newMinConflict);
       }
       newBoard[row][column] = 0;
     }
