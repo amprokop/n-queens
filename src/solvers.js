@@ -1,4 +1,3 @@
-
 var hasColConflictAt = function(board, colIndex){
   var piecesFound = 0;
 
@@ -12,6 +11,7 @@ var hasColConflictAt = function(board, colIndex){
   }
   return false;
 };
+
 
 var hasMajorDiagonalConflictAt = function(board, majorDiagonalColumnIndexAtFirstRow){
   var piecesFound = 0;
@@ -28,6 +28,7 @@ var hasMajorDiagonalConflictAt = function(board, majorDiagonalColumnIndexAtFirst
   }
   return false;
 };
+
 
 var hasMinorDiagonalConflictAt = function (board, minorDiagonalColumnIndexAtFirstRow){
   var piecesFound = 0;
@@ -55,23 +56,6 @@ var contains = function (array, target) {
 };
 
 
-
-
-
-/*           _                    
-   ___  ___ | |_   _____ _ __ ___ 
-  / __|/ _ \| \ \ / / _ \ '__/ __|
-  \__ \ (_) | |\ V /  __/ |  \__ \
-  |___/\___/|_| \_/ \___|_|  |___/
-
-*/
-
-// hint: you'll need to do a full-search of all possible arrangements of pieces!
-// (There are also optimizations that will allow you to skip a lot of the dead search space)
-// take a look at solversSpec.js to see what the tests are expecting
-
-
-// return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 window.findNRooksSolution = function(n){
   var solution = new Board({n:n});
   var board = solution.rows();
@@ -90,8 +74,6 @@ window.findNRooksSolution = function(n){
 };
 
 
-
-// return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n){
   var results = [];
   if (n === 0 || n === 1) return 1;
@@ -117,7 +99,6 @@ window.countNRooksSolutions = function(n){
 };
 
 
-// return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n){
   var solution = new Board({n:n});
   var board = solution.rows();
@@ -135,7 +116,6 @@ window.findNQueensSolution = function(n){
 };
 
 
-// return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n){
   var results = [];
   if (n === 0 || n === 1) return 1;

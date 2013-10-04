@@ -2,16 +2,19 @@ var hasColConflictAt = function(board, bit){
   return contains(board, bit);
 };
 
-
-var hasDiagonalConflictAt = function(board, majorDiagonalColumnIndexAtFirstRow){
-  if abs(power minus power) === abs(array index - array index)
-    return true;
+var logTwo = function(num) {
+   return Math.log(num)/Math.log(2);
 };
 
-
-var hasMinorDiagonalConflictAt = function (board, minorDiagonalColumnIndexAtFirstRow){
-
+var hasDiagonalConflictAt = function(num, index, board){
+  for (var test = 0; test < board.length; test++) {
+    if (Math.abs( logTwo(board[test]) - logTwo(num) ) === Math.abs( test - index ) ) {
+      return true;
+    }
+  }
+  return false;
 };
+
 
 var contains = function (array, target) {
   for (var i = 0; i < array.length; i++) {
@@ -31,25 +34,25 @@ window.countNQueensBitwiseSolutions = function(n){
   subroutine();
 
 
-  function subroutine (row, board, majConflict, minConflict) {
+  function subroutine (row, board) {
     board = board || [];
     row = row || 0;
+    var toPush;
 
     if (row === n){
       results.push(board);
+      return;
     }
 
     for (var i = 0; i < n; i++) {
-      if (i === 0) {
-        board.push(1)
-      } else {
-        var toPush = i<<1
-        board.push(toPush)
+
+      toPush = Math.pow(2,i);
+
+      if ( !(hasColConflictAt(board, toPush) || hasDiagonalConflictAt(toPush, board.length, board) )) {
+        var newBoard = board.concat(toPush);
+        subroutine(row+1, newBoard);
       }
-      if (!(hasColConflictAt(board, toPush) || hasDiagonalConflicts()) {
-        subroutine(row+1, board, conflicts)
-      }
-      board.pop();
     }
-    return results.length;
+  }
+  return results.length;
 };
